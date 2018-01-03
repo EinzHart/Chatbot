@@ -1,10 +1,16 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QPushButton, QLabel, QVBoxLayout,QHBoxLayout
+from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QPushButton, QLabel, QVBoxLayout, QMessageBox
 from PyQt5.QtGui import QIcon, QPainter, QColor, QFont, QBrush
-from PyQt5.QtCore import Qt, pyqtSignal, QObject
+from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot, QObject
+
+from connection_settings import *
 
 class mainmenu(QMainWindow):
+
+
     def __init__(self):
+
+
         super().__init__()
         # variables
         self.channel_name = 'einzhart'
@@ -23,11 +29,13 @@ class mainmenu(QMainWindow):
         self.lbl_nickname = QLabel()
 
 
+
+
         self.init_UI()
 
     def init_UI(self):
         #window
-        self.setWindowFlags(Qt.WindowStaysOnTopHint)
+        # self.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.setWindowTitle("EZHT's chatbox")
         self.setWindowIcon(QIcon("sheikah.png"))
 
@@ -50,7 +58,7 @@ class mainmenu(QMainWindow):
 
         #About
         self.btn_About.resize(self.btn_About.sizeHint())
-
+        self.btn_About.clicked.connect(self.about_message)
         #labels
         self.lbl_channel.setText('channel:' + self.channel_name)
 
@@ -66,16 +74,37 @@ class mainmenu(QMainWindow):
         vertlayout.addWidget(self.btn_SetConnection)
         vertlayout.addWidget(self.btn_SetChatbox)
         vertlayout.addWidget(self.btn_About)
+        self.setGeometry(300, 300, 300, 300)
         vertlayout.addStretch()
         layout_anchor.resize(layout_anchor.sizeHint())
-
-        self.setGeometry(300, 300, 300, 300)
         self.layout().addWidget(layout_anchor)
         #show
         self.show()
 
+
+    def about_message(self):
+        QMessageBox.question(self,'CHATBOX', 'Chatbox v0.1 \r\nEinzHart\r\nJan 1, 2018', QMessageBox.Close)
+
+    def connect_conn_setting(self, conndialog):
+        conndialog.btn_apply.clicked.connect(self.conn_setting_apply)
+        self.connsetting = conndialog
+
+    def conn_setting_apply(self):
+        self.channel_name = self.connsetting.channel_name
+        self.nickname = self.connsetting.nickname
+        self.client_token = self.connsetting.client_token
+        self.server_name = self.connsetting.server_name
+        self.server_port = self.connsetting.server_port
+
+        self.lbl_channel.setText(self.channel_name)
+        self.lbl_nickname.setText(self.nickname)
+        self.repaint()
+
+
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    instant = mainmenu()
-
+    mainmenu_ = mainmenu()
+    connection_settings_ = connection_setting()
+    mainmenu_.connect_conn_setting(connection_settings_)
     sys.exit(app.exec_())
