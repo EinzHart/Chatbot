@@ -34,7 +34,7 @@ class mainmenu(QMainWindow):
         self.init_UI()
 
     def init_UI(self):
-        #window
+        #dialog properities
         # self.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.setWindowTitle("EZHT's chatbox")
         self.setWindowIcon(QIcon("sheikah.png"))

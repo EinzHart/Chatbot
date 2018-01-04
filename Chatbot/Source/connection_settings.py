@@ -9,8 +9,11 @@ class connection_setting(QDialog):
     def __init__(self):
 
         super().__init__()
-
-        # variables
+        #dialog properities
+        self.setWindowTitle('connection settings')
+        self.setWindowIcon(QIcon('sheikah.png'))
+        
+        #variables
         self.channel_name = 'einzhart'
         self.nickname = 'einzhart'
         self.server_name = 'irc.chat.twitch.tv'
