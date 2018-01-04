@@ -96,9 +96,9 @@ class mainmenu(QMainWindow):
         self.server_name = self.connsetting.server_name
         self.server_port = self.connsetting.server_port
 
-        self.lbl_channel.setText(self.channel_name)
-        self.lbl_nickname.setText(self.nickname)
-        self.repaint()
+        self.lbl_channel.setText('channel:' + self.channel_name)
+        self.lbl_nickname.setText('nickname:' + self.nickname)
+        self.show()
 
 
 
@@ -107,4 +107,5 @@ if __name__ == '__main__':
     mainmenu_ = mainmenu()
     connection_settings_ = connection_setting()
     mainmenu_.connect_conn_setting(connection_settings_)
+    connection_settings_.connect_mainmenu(mainmenu_)
     sys.exit(app.exec_())

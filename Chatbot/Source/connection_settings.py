@@ -64,7 +64,15 @@ class connection_setting(QDialog):
         layout.addRow(self.btn_apply, self.btn_cancel)
         self.setGeometry(400, 400, 400, 250)
         self.setLayout(layout)
+        #self.show()
+
+    def call_from_mainmenu(self):
+        self.mainmenu_frame.hide()
         self.show()
+
+    def connect_mainmenu(self, mainmenu_obj):
+        mainmenu_obj.btn_SetConnection.clicked.connect(self.call_from_mainmenu)
+        self.mainmenu_frame = mainmenu_obj
 
     def btn_clicked_apply(self):
         self.channel_name = self.tbox_channame.text()
