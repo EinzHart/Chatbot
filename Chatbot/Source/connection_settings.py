@@ -68,6 +68,17 @@ class connection_setting(QDialog):
 
     def call_from_mainmenu(self):
         self.mainmenu_frame.hide()
+        self.channel_name = self.mainmenu_frame.channel_name
+        self.nickname = self.mainmenu_frame.nickname
+        self.client_token = self.mainmenu_frame.client_token
+        self.server_name = self.mainmenu_frame.server_name
+        self.server_port = self.mainmenu_frame.server_port
+
+        self.tbox_channame.setText(self.channel_name)
+        self.tbox_nickname.setText(self.nickname)
+        self.tbox_clienttoken.setText(self.client_token)
+        self.tbox_servername.setText((self.server_name))
+        self.tbox_serverport.setText(str(self.server_port))
         self.show()
 
     def connect_mainmenu(self, mainmenu_obj):

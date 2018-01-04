@@ -87,6 +87,7 @@ class mainmenu(QMainWindow):
 
     def connect_conn_setting(self, conndialog):
         conndialog.btn_apply.clicked.connect(self.conn_setting_apply)
+        conndialog.btn_cancel.clicked.connect(self.conn_setting_apply)
         self.connsetting = conndialog
 
     def conn_setting_apply(self):
@@ -100,6 +101,8 @@ class mainmenu(QMainWindow):
         self.lbl_nickname.setText('nickname:' + self.nickname)
         self.show()
 
+    def conn_setting_cancel(self):
+        self.show()
 
 
 if __name__ == '__main__':
