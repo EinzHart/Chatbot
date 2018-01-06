@@ -57,16 +57,16 @@ class connection_setting(QDialog):
         self.btn_cancel.resize(self.btn_cancel.sizeHint())
         self.btn_cancel.clicked.connect(self.btn_clicked_cancel)
         #layouts
-        layout = QFormLayout()
-        layout.addRow(QLabel("channel name:"), self.tbox_channame)
-        layout.addRow(QLabel("nickname:"), self.tbox_nickname)
-        layout.addRow(QLabel("client token:"), self.tbox_clienttoken)
-        layout.addRow(QLabel("server name:"), self.tbox_servername)
-        layout.addRow(QLabel("server port:"), self.tbox_serverport)
+        self.layout = QFormLayout()
+        self.layout.addRow(QLabel("channel name:"), self.tbox_channame)
+        self.layout.addRow(QLabel("nickname:"), self.tbox_nickname)
+        self.layout.addRow(QLabel("client token:"), self.tbox_clienttoken)
+        self.layout.addRow(QLabel("server name:"), self.tbox_servername)
+        self.layout.addRow(QLabel("server port:"), self.tbox_serverport)
 
-        layout.addRow(self.btn_apply, self.btn_cancel)
+        self.layout.addRow(self.btn_apply, self.btn_cancel)
         self.setGeometry(400, 400, 400, 250)
-        self.setLayout(layout)
+        self.setLayout(self.layout)
         #self.show()
 
     def call_from_mainmenu(self):

@@ -22,7 +22,8 @@ class irc_comm:
 
     def disconnect(self):
         self.irc.send(("PART #" + self.channel_name + "\r\n").encode('utf-8'))
-        self.disconnect()
+        #self.irc.shutdown(socket.SHUT_RDWR)
+        self.irc.close()
 
     def receive(self):
         text = self.irc.recv(2040)
