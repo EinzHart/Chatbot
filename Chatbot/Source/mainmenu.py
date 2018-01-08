@@ -17,7 +17,7 @@ class mainmenu(QMainWindow):
         self.nickname = 'einzhart'
         self.server_name = 'irc.chat.twitch.tv'
         self.server_port = 6667
-        self.client_token = 'oauth:tzkaxwnvm3si38sz8davspeijz00p6'
+        self.client_token = 'oauth:leo8i5zthdzeakbmy2lq1b84fbpaum'
 
         #buttons and Labels
         self.btn_SetConnection = QPushButton("connection setting", self)
@@ -27,9 +27,6 @@ class mainmenu(QMainWindow):
 
         self.lbl_channel = QLabel()
         self.lbl_nickname = QLabel()
-
-
-
 
         self.init_UI()
 
@@ -46,13 +43,12 @@ class mainmenu(QMainWindow):
         #nickname
         self.lbl_nickname.resize(self.lbl_nickname.sizeHint())
         self.lbl_nickname.setAlignment(Qt.AlignLeft)
+        
         #buttons
         #SetConnection
         self.btn_SetConnection.resize(self.btn_SetConnection.sizeHint())
-
         #SetChatbox
         self.btn_SetChatbox.resize(self.btn_SetChatbox.sizeHint())
-
         #InitConnect
         self.btn_InitConnect.resize(self.btn_InitConnect.sizeHint())
 
@@ -81,15 +77,22 @@ class mainmenu(QMainWindow):
         #show
         self.show()
 
-
-    def about_message(self):
-        QMessageBox.question(self,'CHATBOX', 'Chatbox v0.1 \r\nEinzHart\r\nJan 1, 2018', QMessageBox.Close)
-
+    #connect mainmenu to other dialogs
     def connect_conn_setting(self, conndialog):
         conndialog.btn_apply.clicked.connect(self.conn_setting_apply)
         conndialog.btn_cancel.clicked.connect(self.conn_setting_apply)
         self.connsetting = conndialog
 
+    def connect_chatbox(self,chatbox_dialog):
+        chatbox_dialog.btn_disconnect.clicked.connect(self.chatbox_disconnect)
+        self.chatbox_diag = chatbox_dialog
+
+        
+    #button click handler to functional dialogs
+    def about_message(self):
+        QMessageBox.question(self,'CHATBOX', 'Chatbox v0.1 \r\nEinzHart\r\nJan 1, 2018', QMessageBox.Close)
+
+    #button click handlier from functional dialogs
     def conn_setting_apply(self):
         self.channel_name = self.connsetting.channel_name
         self.nickname = self.connsetting.nickname
@@ -103,6 +106,11 @@ class mainmenu(QMainWindow):
 
     def conn_setting_cancel(self):
         self.show()
+
+    def chatbox_disconnect(self):
+        self.show()
+        
+
 
 
 if __name__ == '__main__':

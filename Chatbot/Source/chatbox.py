@@ -1,5 +1,6 @@
 import sys
 from irc_interface import *
+from parsing import *
 from PyQt5.QtWidgets import QApplication, QDialog, QPushButton, QLabel, QListWidget
 from PyQt5.QtGui import QIcon, QPainter, QColor, QFont, QBrush
 from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot, QObject, QThread
@@ -16,7 +17,13 @@ class irc_thread(QThread):
     def run(self):
         while 1:
             text = self.irccomm.receive()
-            self.sig.emit(str(text,'utf-8'))
+            text_string = str(text,'utf-8')
+            if text_string.find('PING') != -1:
+                self.irccomm.pong() #need to return irc ping request
+            else:
+                msgtype, chatname, chatcont = parse_privmsg(text_string)
+                if msgtype == 'message':
+                   self.sig.emit(chatname + ':' + chatcont)
             
 
 
@@ -36,22 +43,13 @@ class chatbox(QDialog):
         #display accessories
         self.btn_disconnect = QPushButton("disconnect", self)
         self.chatlist = QListWidget(self)
-        self.chatlist.addItem("The world could always use more heroes!")
 
-        #socket parameters
+        #socket default parameters
         self.channel_name = 'einzhart'
         self.nickname = 'einzhart'
         self.server_name = 'irc.chat.twitch.tv'
         self.server_port = 6667
-        self.client_token = 'oauth:tzkaxwnvm3si38sz8davspeijz00p6'
-
-        #config socket for irc
-        self.ircomm = irc_comm(self.channel_name, self.nickname,
-                               self.client_token, self.server_name, self.server_port)
-
-        
-        #config thread receiving
-        self.ircthread = irc_thread(self.ircomm, self.textsignal)
+        self.client_token = 'oauth:leo8i5zthdzeakbmy2lq1b84fbpaum'
 
         #display parameters
         #self.disp_font =
@@ -67,26 +65,58 @@ class chatbox(QDialog):
         #UI initialization
         self.initUI()
         
-        #socket initiate connection
-        self.ircomm.connect()
-        self.ircthread.start()
-        
     def initUI(self):
         self.btn_disconnect.move(250,350)
         self.chatlist.resize(300,300)
         self.chatlist.move(15,15)
         self.chatlist.setFont(QFont('BigNoodleTooOblique', 15))
-        self.show()
+        self.chatlist.setWordWrap(True)
+        #self.show()
 
+    
+    #button click event handler
     def click_disconnect(self):
         self.ircthread.terminate()
         self.ircthread.wait()
         self.ircomm.disconnect()
-        self.close()
+        #destroy the old sockets and thread
+        self.ircthread.__del__()
+        self.ircthread.__del__()
+        self.hide()
+
+    #connect to mainmenu
+    def connect_mainmenu(self, mainmenu):
+        self.mainmenu_ = mainmenu
+        mainmenu.btn_InitConnect.clicked.connect(self.call_from_mainmenu)
+    
+    #mainmenu call handler
+    def call_from_mainmenu(self):
+        #handling displays
+        self.mainmenu_.hide()
+        self.chatlist.clear()
+        self.chatlist.addItem("The world could always use more heroes!")
+        self.show()
         
+        #get connection config from mainmenu dialog
+        self.channel_name = self.mainmenu_.channel_name
+        self.nickname = self.mainmenu_.nickname
+        self.client_token = self.mainmenu_.client_token
+        self.server_name = self.mainmenu_.server_name
+        self.server_port = self.mainmenu_.server_port
+        
+        #config socket for irc
+        self.ircomm = irc_comm(self.channel_name, self.nickname,
+                               self.client_token, self.server_name, self.server_port)
+        #config thread receiving
+        self.ircthread = irc_thread(self.ircomm, self.textsignal)
+        self.ircomm.connect()
+        self.ircthread.start()
+        
+    #incoming string event 
     @pyqtSlot('QString')
     def addLine(self, new_line):
         self.chatlist.addItem(new_line)
+        self.chatlist.scrollToBottom()
         
 if __name__ == '__main__':
     app = QApplication(sys.argv)

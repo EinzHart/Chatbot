@@ -18,7 +18,7 @@ class connection_setting(QDialog):
         self.nickname = 'einzhart'
         self.server_name = 'irc.chat.twitch.tv'
         self.server_port = 6667
-        self.client_token = 'oauth:tzkaxwnvm3si38sz8davspeijz00p6'
+        self.client_token = 'oauth:leo8i5zthdzeakbmy2lq1b84fbpaum'
 
         #textbox
         #channel name

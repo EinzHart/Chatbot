@@ -14,6 +14,9 @@ class irc_comm:
     def send(self, msg):
         self.irc.send(("PRIVMSG " + self.channel_name + " :" + msg + "\r\n").encode('utf-8'))
 
+    def pong(self):
+        self.irc.send(("PONG :tmi.twitch.tv").encode('utf-8'))
+        
     def connect(self):
         self.irc.connect((self.server_name, self.server_port))
         self.irc.send(("PASS " + self.client_token + "\r\n").encode('utf-8'))
@@ -22,7 +25,7 @@ class irc_comm:
 
     def disconnect(self):
         self.irc.send(("PART #" + self.channel_name + "\r\n").encode('utf-8'))
-        #self.irc.shutdown(socket.SHUT_RDWR)
+        self.irc.shutdown(socket.SHUT_RDWR)
         self.irc.close()
 
     def receive(self):
