@@ -52,11 +52,9 @@ class chatbox(QDialog):
         self.client_token = 'oauth:leo8i5zthdzeakbmy2lq1b84fbpaum'
 
         #display parameters
-        #self.disp_font =
-        #self.disp_color =
-        #self.disp_opacity =
-        self.disp_lines = 1
-
+        self.disp_font= QFont('BigNoodleTooOblique', 15)
+        self.disp_color = QColor(255, 255, 255)
+        self.disp_opacity = 1
 
         #signal connecting
         self.textsignal.connect(self.addLine)
@@ -93,16 +91,27 @@ class chatbox(QDialog):
     def call_from_mainmenu(self):
         #handling displays
         self.mainmenu_.hide()
-        self.chatlist.clear()
-        self.chatlist.addItem("The world could always use more heroes!")
-        self.show()
-        
+
+        #get display parameters from mainmenu
+        self.disp_font = self.mainmenu_.chatbox_font
+        self.disp_opacity = self.mainmenu_.chatbox_opacity
+        self.disp_color = self.mainmenu_.chatbox_bkgcolor
+                
         #get connection config from mainmenu dialog
         self.channel_name = self.mainmenu_.channel_name
         self.nickname = self.mainmenu_.nickname
         self.client_token = self.mainmenu_.client_token
         self.server_name = self.mainmenu_.server_name
         self.server_port = self.mainmenu_.server_port
+
+        #reset chatbox UI
+        self.chatlist.clear()
+        self.chatlist.setFont(self.disp_font)
+        self.chatlist.addItem("The world could always use more heroes!")
+        self.setStyleSheet('background-color:'+self.disp_color.name()+';'+\
+                           'border-style: none')
+        self.setWindowOpacity(self.disp_opacity)
+        self.show()
         
         #config socket for irc
         self.ircomm = irc_comm(self.channel_name, self.nickname,

@@ -13,10 +13,9 @@ class display_preference(QDialog):
         self.setWindowIcon(QIcon('sheikah.png'))
 
         #variables
-        self.chatbox_opacity = 0
+        self.chatbox_opacity = 1
         self.chatbox_font = QFont('BigNoodleTooOblique', 15)
         self.chatbox_bkgcolor = QColor(255, 255, 255)
-        #self.chatbox_bkgcolor
 
         #widgets
         #font selector
@@ -30,7 +29,9 @@ class display_preference(QDialog):
         self.btn_colorsel = QPushButton('bkg color', self)
         #apply and cancel
         self.btn_apply = QPushButton('apply')
+        self.btn_apply.clicked.connect(self.btn_clicked_apply)
         self.btn_cancel = QPushButton('cancel')
+        self.btn_cancel.clicked.connect(self.btn_clicked_cancel)
         
         #connection
         self.btn_fontsel.clicked.connect(self.font_select)
@@ -38,7 +39,7 @@ class display_preference(QDialog):
         self.btn_colorsel.clicked.connect(self.color_select)
         #init functions call
         self.initUI()
-        self.show()
+        #self.show()
 
     def initUI(self):
         #font groupbox
@@ -95,12 +96,31 @@ class display_preference(QDialog):
     def opacity_alter(self, slider_val):
         _opacity = format(float(slider_val / 100), '.2f');
         self.lbl_opacity.setText(str(_opacity))
-        print(_opacity)
+        self.chatbox_opacity = float(_opacity)
+        #print(_opacity)
 
     def color_select(self):
         _bkgcolor = QColorDialog.getColor()
+        self.chatbox_bkgcolor = _bkgcolor
         self.lbl_colorbox.setStyleSheet('background-color:'+_bkgcolor.name()+';')
-        print(_bkgcolor.name())
+        #print(_bkgcolor.name())
+
+    def btn_clicked_apply(self):
+        self.hide()
+
+    def btn_clicked_cancel(self):
+        self.hide()
+
+    def connect_mainmenu(self, mainmenu_):
+        self.mainmenu_ = mainmenu_
+        mainmenu_.btn_SetChatbox.clicked.connect(self.call_from_mainmenu)
+
+    def call_from_mainmenu(self):
+        self.chatbox_opacity = self.mainmenu_.chatbox_opacity
+        self.chatbox_font = self.mainmenu_.chatbox_font
+        self.chatbox_bkgcolor = self.mainmenu_.chatbox_bkgcolor
+        self.mainmenu_.hide()
+        self.show()
         
         
         

@@ -13,11 +13,16 @@ class mainmenu(QMainWindow):
 
         super().__init__()
         # variables
+        #connection parameters
         self.channel_name = 'einzhart'
         self.nickname = 'einzhart'
         self.server_name = 'irc.chat.twitch.tv'
         self.server_port = 6667
         self.client_token = 'oauth:leo8i5zthdzeakbmy2lq1b84fbpaum'
+        #chatbox display parameters
+        self.chatbox_opacity = 1
+        self.chatbox_font = QFont('BigNoodleTooOblique', 15)
+        self.chatbox_bkgcolor = QColor(255, 255, 255)
 
         #buttons and Labels
         self.btn_SetConnection = QPushButton("connection setting", self)
@@ -51,7 +56,6 @@ class mainmenu(QMainWindow):
         self.btn_SetChatbox.resize(self.btn_SetChatbox.sizeHint())
         #InitConnect
         self.btn_InitConnect.resize(self.btn_InitConnect.sizeHint())
-
         #About
         self.btn_About.resize(self.btn_About.sizeHint())
         self.btn_About.clicked.connect(self.about_message)
@@ -80,12 +84,17 @@ class mainmenu(QMainWindow):
     #connect mainmenu to other dialogs
     def connect_conn_setting(self, conndialog):
         conndialog.btn_apply.clicked.connect(self.conn_setting_apply)
-        conndialog.btn_cancel.clicked.connect(self.conn_setting_apply)
+        conndialog.btn_cancel.clicked.connect(self.conn_setting_cancel)
         self.connsetting = conndialog
 
     def connect_chatbox(self,chatbox_dialog):
         chatbox_dialog.btn_disconnect.clicked.connect(self.chatbox_disconnect)
         self.chatbox_diag = chatbox_dialog
+
+    def connect_disp_settings(self, disp_dialog):
+        disp_dialog.btn_apply.clicked.connect(self.disp_setting_apply)
+        disp_dialog.btn_cancel.clicked.connect(self.disp_setting_cancel)
+        self.disp_dialog = disp_dialog
 
         
     #button click handler to functional dialogs
@@ -105,12 +114,19 @@ class mainmenu(QMainWindow):
         self.show()
 
     def conn_setting_cancel(self):
-        self.show()
+        self.show()    
 
     def chatbox_disconnect(self):
         self.show()
         
+    def disp_setting_apply(self):
+        self.chatbox_font = self.disp_dialog.chatbox_font
+        self.chatbox_opacity = self.disp_dialog.chatbox_opacity
+        self.chatbox_bkgcolor = self.disp_dialog.chatbox_bkgcolor
+        self.show()
 
+    def disp_setting_cancel(self):
+        self.show()
 
 
 if __name__ == '__main__':
